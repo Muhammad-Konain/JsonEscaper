@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 )
@@ -17,41 +16,64 @@ const (
 
 func main() {
 
-	if len(os.Args) > 23 {
-		log.Fatal("Expecting 2 arguments only got ", len(os.Args))
-	}
-
 	var jsonPayload string
 	flag.StringVar(&jsonPayload, "p", "", "Json payload")
 
 	var formatOption string
-	flag.StringVar(&formatOption, "f", "n", "Formatting option")
+	flag.StringVar(&formatOption, "f", "", "Formatting option")
 
 	flag.Parse()
 
 	if jsonPayload == "" {
-		log.Fatal("Json payload is requied but not supplied.")
+		fmt.Println("Json payload (-p) is requied but not supplied.")
+		os.Exit(1)
 	}
 
-	var stringReplacer *strings.Replacer
+	if formatOption == "" {
+		fmt.Println("Format option (-f) is requied but not supplied.")
+		os.Exit(1)
+	}
+
+	fmt.Println()
 
 	if formatOption == UNESCAPTE {
-		stringReplacer = strings.NewReplacer("\\\"", "\"")
+		unescapteAndFormat(jsonPayload)
+
 	} else if formatOption == ESCAPTE {
-		stringReplacer = strings.NewReplacer("\"", "\\\"")
+		escape(jsonPayload)
+
 	} else {
-		log.Fatal("Invalid formatting option provided.")
+		fmt.Println("Invalid formatting option provided.")
 		os.Exit(0)
 	}
 
-	var unescapedJson string = stringReplacer.Replace(jsonPayload)
+}
+
+func escape(jsonPayload string) {
+	var stringReplacer *strings.Replacer
+	var processedJson string
+
+	stringReplacer = strings.NewReplacer("\"", "\\\"")
+	processedJson = stringReplacer.Replace(jsonPayload)
+	fmt.Print(processedJson)
+	os.Exit(1)
+}
+
+func unescapteAndFormat(jsonPayload string) {
+	var stringReplacer *strings.Replacer
+	var processedJson string
+
+	stringReplacer = strings.NewReplacer("\\\"", "\"")
+
+	processedJson = stringReplacer.Replace(jsonPayload)
+
 	var result bytes.Buffer
-	err := json.Indent(&result, []byte(unescapedJson), "", "\t")
+	err := json.Indent(&result, []byte(processedJson), "", "\t")
 
 	if err != nil {
-		log.Fatal("error formatting json ", err.Error())
+		fmt.Println("error formatting json ", err.Error())
 	}
 
-	formattedJson := string(result.Bytes())
+	formattedJson := result.String()
 	fmt.Print(formattedJson)
 }

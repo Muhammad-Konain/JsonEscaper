@@ -12,7 +12,7 @@
             "program": "${fileDirname}",
             "args": ["-p", 
             "{\"EcommSalesId\":4680628404433,\"AXSalesOrderID\":\"S-ORD0802345\",\"ReturnLines\":[{\"Type\":\"4\",\"TaxGroupCode\":\"SHIP\",\"ChargeCode\":\"51200\",\"Price\":12,\"Quantity\":1},{\"Type\":\"5\",\"Description\":\"\"}],\"IsPosted\":false,\"SalesOrderTotal\":379.76,\"EcommSalesOrderNum\":\"1203\",\"Dimensions\":[{\"DimensionCode\":\"CHANNEL\",\"DimensionValue\":\"S-CD\"},{\"DimensionCode\":\"DEP\",\"DimensionValue\":\"GENERAL\"}],\"SalesRefundTotal\":\"12.00\"}",
-             "-f", "u"]
+             "-f", "e"]
         }
     ]
 }
